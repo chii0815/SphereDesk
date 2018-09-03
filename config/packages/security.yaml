@@ -1,0 +1,39 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        my_ldap:
+            id: app.ext_ldap_user_provider
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            form_login_ldap:
+                service: app.ldap
+                dn_string: '{username}'
+                login_path: login
+                check_path: login
+                provider: my_ldap
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: homepage
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                httponly: true
+                token_provider: app.token
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+
+    # role_hierarchy:
+        # ROLE_ADMIN:       ROLE_USER
+        # ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+ 
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/_error, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+

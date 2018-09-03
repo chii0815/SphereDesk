@@ -1,0 +1,70 @@
+{%  block navigation %}
+    {% set route = app.request.attributes.get('_route') %}
+
+    <nav class="navbar fixed-top navbar-icon-top navbar-expand-lg navbar-light bg-light">
+        <div id="infobar" class="d-md-none d-lg-block d-xl-block text-right">
+                    <span>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            {{ 'Logged in as'|trans }}: {{ app.user.displayName }}
+                        {% endif %}
+                    </span>
+        </div>
+        <a class="navbar-brand" href="{{ path('homepage') }}">
+            <i class="fas fa-globe">
+
+            </i>
+            {{ app_name }}<br>
+            <div id="infobar_2"><span id="today">{{ "now"|date('d.m.Y') }}</span> <span id="clock">{{ "now"|date('H:i') }}</span></div>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul id="main-nav" class="navbar-nav mr-auto">
+                <li class="nav-item {{ route ==  'homepage' ? 'active' }}">
+                    <a class="nav-link" href="{{ path('homepage') }}">
+                        <i class="fa fa-home"></i>
+                        {{ 'Homepage'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item {{ route ==  '' ? 'active' }}">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-envelope-o">
+                            <span class="badge badge-danger">11</span>
+                        </i>
+                        Messages
+                    </a>
+                </li>
+                <li class="nav-item {{ route ==  '' ? 'active' }}">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-envelope-o">
+                            <span class="badge badge-danger">11</span>
+                        </i>
+                        Disabled
+                    </a>
+                </li>
+            </ul>
+            <ul id="user-nav" class="navbar-nav">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('logout') }}">
+                            <i class="fas fa-sign-out-alt">
+                            </i>
+                            {{ 'Logout'|trans }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item {{ route ==  'login' ? 'active' }}">
+                        <a class="nav-link" href="{{ path('login') }}">
+                            <i class="fas fa-sign-in-alt">
+                            </i>
+                            {{ 'Login'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+{% endblock %}
